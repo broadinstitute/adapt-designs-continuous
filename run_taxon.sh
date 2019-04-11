@@ -40,8 +40,11 @@ conda activate dgd
 
 # Determine an output directory and create it
 timestamp=$(date +"%s")
-outdir="out/designs/${taxid}_${segment}/${timestamp}/"
+outdir="out/designs/${taxid}_${segment}/${timestamp}"
 mkdir -p $outdir
 
 # Run the design
 design.py complete-targets auto-from-args $taxid $segment $refaccs $outdir/design.tsv -gl $ARG_GL -gm $ARG_GM -gp $ARG_GP -pl $ARG_PL -pm $ARG_PM -pp $ARG_PP --max-primers-at-site $ARG_MAXPRIMERSATSITE --max-target-length $ARG_MAXTARGETLENGTH --cost-fn-weights $ARG_COSTFNWEIGHTS --best-n-targets $ARG_BESTNTARGETS --mafft-path $MAFFT_PATH --prep-memoize-dir $PREP_MEMOIZE_DIR --cluster-threshold $CLUSTER_THRESHOLD --cover-by-year-decay $ARG_COVERBYYEARSTART $ARG_COVERBYYEARDECAY $ARGS_INFLUENZA --verbose &> $outdir/design.out
+
+# gzip the stdout/stderr
+gzip $outdir/design.out
