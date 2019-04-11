@@ -122,8 +122,8 @@ Arenaviridae	Mammarenavirus	Guanarito mammarenavirus	45219	L	NC_005082
 Arenaviridae	Mammarenavirus	Guanarito mammarenavirus	45219	S	NC_005077
 Arenaviridae	Mammarenavirus	Ippy mammarenavirus	55096	L	NC_007906
 Arenaviridae	Mammarenavirus	Ippy mammarenavirus	55096	S	NC_007905
-Arenaviridae	Mammarenavirus	Lassa mammarenavirus	11620	L	NC_004296,NC_004297
-Arenaviridae	Mammarenavirus	Lassa mammarenavirus	11620	S	NC_004296
+Arenaviridae	Mammarenavirus	Lassa mammarenavirus	11620	L	NC_004297
+Arenaviridae	Mammarenavirus	Lassa mammarenavirus	11620	S	NC_004296,KM821998,GU481072,KM821773
 Arenaviridae	Mammarenavirus	Latino mammarenavirus	45221	L	NC_010760
 Arenaviridae	Mammarenavirus	Latino mammarenavirus	45221	S	NC_010758
 Arenaviridae	Mammarenavirus	Loei River mammarenavirus	1437126	L	NC_038365
@@ -456,22 +456,22 @@ Nairoviridae	Orthonairovirus	Tofla virus	1615758	S	NC_029122
 Nairoviridae	Orthonairovirus	Yogue virus	1712572	L	NC_029931
 Nairoviridae	Orthonairovirus	Yogue virus	1712572	M	NC_029935
 Nairoviridae	Orthonairovirus	Yogue virus	1712572	S	NC_029936
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	1	NC_007378,NC_002023,NC_026438,NC_026422,NC_007373
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	2	NC_002021,NC_007375,NC_026435,NC_026423,NC_007372,NC_007358
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	3	NC_007376,NC_002022,NC_026437,NC_026424,NC_007371
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	4	NC_007374,NC_002017,NC_026433,NC_026425,NC_007366,NC_007362
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	5	NC_007381,NC_026436,NC_026426,NC_004905,NC_007369,NC_002019
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	6	NC_007382,NC_026434,NC_026429,NC_007368,NC_002018
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	7	NC_007377,NC_007363,NC_002016,NC_026431,NC_026427,NC_007367,NC_004907
-Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	8	NC_007380,NC_007364,NC_002020,NC_026432,NC_026428,NC_007370,NC_004906
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	1	NC_002204
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	2	NC_002205
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	3	NC_002206
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	4	NC_002207
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	5	NC_002208
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	6	NC_002209
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	7	NC_002210
-Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	8	NC_002211
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	1	NC_007378,NC_002023,NC_026438,NC_026422,NC_007373,MK676647,MK677168
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	2	NC_002021,NC_007375,NC_026435,NC_026423,NC_007372,NC_007358,MK676648,MK677169
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	3	NC_007376,NC_002022,NC_026437,NC_026424,NC_007371,MK676641,MK677170
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	4	NC_007374,NC_002017,NC_026433,NC_026425,NC_007366,NC_007362,MK676642,MK677171
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	5	NC_007381,NC_026436,NC_026426,NC_004905,NC_007369,NC_002019,MK676643,MK677172
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	6	NC_007382,NC_026434,NC_026429,NC_007368,NC_002018,MK676644,MK677173
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	7	NC_007377,NC_007363,NC_002016,NC_026431,NC_026427,NC_007367,NC_004907,MK676645,MK677174
+Orthomyxoviridae	Alphainfluenzavirus	Influenza A virus	11320	8	NC_007380,NC_007364,NC_002020,NC_026432,NC_026428,NC_007370,NC_004906,MK676646,MK677175
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	1	NC_002204,MK715549
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	2	NC_002205,MK715548
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	3	NC_002206,MK715550
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	4	NC_002207,MK715551
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	5	NC_002208,MK715552
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	6	NC_002209,MK715553
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	7	NC_002210,MK715554
+Orthomyxoviridae	Betainfluenzavirus	Influenza B virus	11520	8	NC_002211,MK715555
 Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	1	NC_006308
 Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	2	NC_006307
 Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	3	NC_006309
