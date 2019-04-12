@@ -174,7 +174,7 @@ Arenaviridae	Reptarenavirus	Ordinary reptarenavirus	2170178	L	NC_039008
 Arenaviridae	Reptarenavirus	Ordinary reptarenavirus	2170178	S	NC_039007
 Astroviridae	Mamastrovirus	Mamastrovirus 1	1239565	None	NC_001943,NC_030922
 Astroviridae	Mamastrovirus	Mamastrovirus 6	1239570	None	NC_011400
-Astroviridae	Mamastrovirus	Mamastrovirus 8	1239572	None	UNKNOWN
+Astroviridae	Mamastrovirus	Mamastrovirus 8	1239572	None	GQ415660
 Astroviridae	Mamastrovirus	Mamastrovirus 9	1239573	None	NC_013060
 Caliciviridae	Norovirus	Norwalk virus	11983	None	NC_029645,NC_029646,NC_029647,NC_001959,NC_008311
 Caliciviridae	Sapovirus	Bat sapovirus TLC58/HK	1185359	None	NC_017936
@@ -212,7 +212,7 @@ Flaviviridae	Flavivirus	Aedes flavivirus	390845	None	NC_012932
 Flaviviridae	Flavivirus	Apoi virus	64280	None	NC_003676
 Flaviviridae	Flavivirus	Aroa virus	64303	None	NC_009026
 Flaviviridae	Flavivirus	Bagaza virus	64290	None	NC_012534
-Flaviviridae	Flavivirus	Banzi virus	38837	None	UNKNOWN
+Flaviviridae	Flavivirus	Banzi virus	38837	None	DQ859056
 Flaviviridae	Flavivirus	Bouboui virus	64295	None	NC_033693
 Flaviviridae	Flavivirus	Cacipacore virus	64305	None	NC_026623
 Flaviviridae	Flavivirus	Cell fusing agent virus	31658	None	NC_001564
@@ -302,9 +302,9 @@ Hantaviridae	Orthohantavirus	Asama orthohantavirus	1980457	S	NC_038273
 Hantaviridae	Orthohantavirus	Bayou orthohantavirus	1980459	L	NC_038299
 Hantaviridae	Orthohantavirus	Bayou orthohantavirus	1980459	M	NC_038300
 Hantaviridae	Orthohantavirus	Bayou orthohantavirus	1980459	S	NC_038298
-Hantaviridae	Orthohantavirus	Black creek canal orthohantavirus	1980460	L	UNKNOWN
-Hantaviridae	Orthohantavirus	Black creek canal orthohantavirus	1980460	M	UNKNOWN
-Hantaviridae	Orthohantavirus	Black creek canal orthohantavirus	1980460	S	UNKNOWN
+Hantaviridae	Orthohantavirus	Black creek canal orthohantavirus	1980460	L	GU997097
+Hantaviridae	Orthohantavirus	Black creek canal orthohantavirus	1980460	M	L39950
+Hantaviridae	Orthohantavirus	Black creek canal orthohantavirus	1980460	S	L39949
 Hantaviridae	Orthohantavirus	Bowe orthohantavirus	1980461	L	NC_034407
 Hantaviridae	Orthohantavirus	Bowe orthohantavirus	1980461	M	NC_034406
 Hantaviridae	Orthohantavirus	Bowe orthohantavirus	1980461	S	NC_034405
@@ -317,7 +317,7 @@ Hantaviridae	Orthohantavirus	Cano Delgadito orthohantavirus	1980463	S	NC_034528
 Hantaviridae	Orthohantavirus	Cao Bang orthohantavirus	1980464	L	NC_034485
 Hantaviridae	Orthohantavirus	Cao Bang orthohantavirus	1980464	M	NC_034474
 Hantaviridae	Orthohantavirus	Cao Bang orthohantavirus	1980464	S	NC_034484
-Hantaviridae	Orthohantavirus	Choclo orthohantavirus	1980465	L	UNKNOWN
+Hantaviridae	Orthohantavirus	Choclo orthohantavirus	1980465	L	KT983773
 Hantaviridae	Orthohantavirus	Choclo orthohantavirus	1980465	M	NC_038374
 Hantaviridae	Orthohantavirus	Choclo orthohantavirus	1980465	S	NC_038373
 Hantaviridae	Orthohantavirus	Dabieshan orthohantavirus	1980466	M	NC_038383
@@ -646,9 +646,9 @@ Peribunyaviridae	Orthobunyavirus	Oriboca orthobunyavirus	1934100	S	NC_034476
 Peribunyaviridae	Orthobunyavirus	Oropouche orthobunyavirus	1933309	L	NC_005776
 Peribunyaviridae	Orthobunyavirus	Oropouche orthobunyavirus	1933309	M	NC_005775
 Peribunyaviridae	Orthobunyavirus	Oropouche orthobunyavirus	1933309	S	NC_005777
-Peribunyaviridae	Orthobunyavirus	Patois orthobunyavirus	1934101	L	UNKNOWN
-Peribunyaviridae	Orthobunyavirus	Patois orthobunyavirus	1934101	M	UNKNOWN
-Peribunyaviridae	Orthobunyavirus	Patois orthobunyavirus	1934101	S	UNKNOWN
+Peribunyaviridae	Orthobunyavirus	Patois orthobunyavirus	1934101	L	MH017277
+Peribunyaviridae	Orthobunyavirus	Patois orthobunyavirus	1934101	M	MH017283
+Peribunyaviridae	Orthobunyavirus	Patois orthobunyavirus	1934101	S	MH017273
 Peribunyaviridae	Orthobunyavirus	Sathuperi orthobunyavirus	159141	L	NC_018461
 Peribunyaviridae	Orthobunyavirus	Sathuperi orthobunyavirus	159141	M	NC_018466
 Peribunyaviridae	Orthobunyavirus	Sathuperi orthobunyavirus	159141	S	NC_018462
@@ -661,9 +661,9 @@ Peribunyaviridae	Orthobunyavirus	Shuni orthobunyavirus	159148	S	NC_018460
 Peribunyaviridae	Orthobunyavirus	Simbu orthobunyavirus	35306	L	NC_018476
 Peribunyaviridae	Orthobunyavirus	Simbu orthobunyavirus	35306	M	NC_018478
 Peribunyaviridae	Orthobunyavirus	Simbu orthobunyavirus	35306	S	NC_018477
-Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	L	UNKNOWN
-Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	M	UNKNOWN
-Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	S	UNKNOWN
+Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	L	MF497779
+Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	M	MF497777
+Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	S	MF497771
 Peribunyaviridae	Orthobunyavirus	Tete orthobunyavirus	35319	L	NC_039184
 Peribunyaviridae	Orthobunyavirus	Tete orthobunyavirus	35319	M	NC_039183
 Peribunyaviridae	Orthobunyavirus	Tete orthobunyavirus	35319	S	NC_039185
@@ -987,7 +987,7 @@ Retroviridae	Lentivirus	Human immunodeficiency virus 1	11676	None	NC_001802
 Retroviridae	Lentivirus	Human immunodeficiency virus 2	11709	None	NC_001722
 Retroviridae	Lentivirus	Simian immunodeficiency virus	11723	None	NC_004455,NC_001549
 Retroviridae	Spumavirus	African green monkey simian foamy virus	338079	None	NC_010820
-Retroviridae	Spumavirus	Macaque simian foamy virus	338478	None	UNKNOWN
+Retroviridae	Spumavirus	Macaque simian foamy virus	338478	None	KF026286
 Retroviridae	Spumavirus	Simian foamy virus	11642	None	NC_001364
 Retroviridae	unknown	Human endogenous retrovirus K	45617	None	NC_022518
 Rhabdoviridae	Ledantevirus	Le Dantec ledantevirus	1978540	None	NC_034443
@@ -1041,4 +1041,4 @@ Togaviridae	Alphavirus	Western equine encephalitis virus	11039	None	NC_003908
 Togaviridae	Alphavirus	Whataroa virus	48543	None	NC_016961
 Togaviridae	Rubivirus	Rubella virus	11041	None	NC_001545
 unknown	Deltavirus	Hepatitis delta virus	12475	None	NC_001653
-unknown	unknown	circular ssDNA virus HV-CV1		None	NC_030449
+unknown	unknown	circular ssDNA virus HV-CV1	1862826	None	NC_030449
