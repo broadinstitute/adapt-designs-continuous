@@ -8,7 +8,7 @@ segment=$2
 refaccs=$3
 
 # Set variables for design
-PREP_MEMOIZE_DIR="/tmp/prep-memoize-dir"
+PREP_MEMOIZE_DIR="/ebs/tmpfs/tmp/prep-memoize-dir"
 MAFFT_PATH="/home/hayden/viral-ngs/viral-ngs-etc/conda-env/bin/mafft"
 CLUSTER_THRESHOLD=0.15
 ARG_GL="28"
@@ -23,7 +23,7 @@ ARG_COSTFNWEIGHTS="0.6667 0.2222 0.1111"
 ARG_BESTNTARGETS="15"
 
 # Make the memoize directory
-mkdir -p /tmp/prep-memoize-dir
+mkdir -p $PREP_MEMOIZE_DIR
 
 # Set --prep-influenza if needed
 if [ "$taxid" == "11320" ] || [ "$taxid" == "11520" ]; then
@@ -33,6 +33,9 @@ if [ "$taxid" == "11320" ] || [ "$taxid" == "11520" ]; then
 else
     ARGS_INFLUENZA=""
 fi
+
+# Set tmp directory
+export TMPDIR="/ebs/tmpfs/tmp"
 
 # Activate dgd conda environment
 source ~/anaconda3/etc/profile.d/conda.sh
