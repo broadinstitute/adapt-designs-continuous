@@ -25,15 +25,17 @@ while read -r taxonomy; do
         continue
     fi
 
-    num_seqs=$(cat $taxonomy_outdir/input-sequences.txt | wc -l)
-
-    summary=$(python summarize_design_on_taxon.py $taxonomy_outdir $JACCARD_THRES)
+    # Summarize output, but redirect stderr to /dev/null
+    summary=$(python summarize_design_on_taxon.py $taxonomy_outdir $JACCARD_THRES 2> /dev/null)
     if [ -z "$summary" ]; then
         # An error occurred; likely no designs could be found for this
         # taxonomy (e.g., none completed)
         continue
     fi
     while read -r summary_line; do
+        timestamp=$(echo "$summary_line" | awk -F'\t' '{print $2}')
+        num_seqs=$(cat ${taxonomy_outdir}/${timestamp}/input-sequences.txt | wc -l)
+
         echo -e "$family\t$genus\t$species\t$taxid\t$segment\t$num_seqs\t$summary_line" >> $summary_outdir/summary.tsv
     done <<< "$summary"
 done < <(tail -n +2 $TAXONOMIES_FILE)
