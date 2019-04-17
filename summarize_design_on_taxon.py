@@ -172,10 +172,6 @@ class Design:
         # Pull out the best N targets
         rows = sorted(rows)
         if num_targets != None:
-            if len(rows) < num_targets:
-                raise Exception(("The number of rows in a design (%d) is fewer "
-                    "than the number of targets to read (%d)") %
-                    (len(rows), num_targets))
             rows = rows[:num_targets]
 
         targets = []
