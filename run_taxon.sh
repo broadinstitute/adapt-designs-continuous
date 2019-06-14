@@ -8,7 +8,7 @@ segment=$2
 refaccs=$3
 
 # Set variables for design
-PREP_MEMOIZE_DIR="/ebs/tmpfs/tmp/prep-memoize-dir"
+PREP_MEMOIZE_DIR="/ebs/dgd-analysis/prep-memoize-dir"
 MAFFT_PATH="/home/hayden/viral-ngs/viral-ngs-etc/conda-env/bin/mafft"
 CLUSTER_THRESHOLD=0.15
 ARG_GL="28"
@@ -29,7 +29,8 @@ mkdir -p $PREP_MEMOIZE_DIR
 if [ "$taxid" == "11320" ] || [ "$taxid" == "11520" ]; then
     ARG_COVERBYYEARSTART=2015
     ARG_COVERBYYEARDECAY=0.95
-    ARGS_INFLUENZA="--prep-influenza --cover-by-year-decay $ARG_COVERBYYEARSTART $ARG_COVERBYYEARDECAY"
+    # Use --guides-should-cover-all-seqs to improve runtime on diverse datasets
+    ARGS_INFLUENZA="--prep-influenza --cover-by-year-decay $ARG_COVERBYYEARSTART $ARG_COVERBYYEARDECAY --guides-should-cover-all-seqs"
 else
     ARGS_INFLUENZA=""
 fi
