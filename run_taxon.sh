@@ -30,7 +30,7 @@ if [ "$taxid" == "11320" ] || [ "$taxid" == "11520" ]; then
     ARG_COVERBYYEARSTART=2015
     ARG_COVERBYYEARDECAY=0.95
     # Use --guides-should-cover-all-seqs to improve runtime on diverse datasets
-    ARGS_INFLUENZA="--prep-influenza --cover-by-year-decay $ARG_COVERBYYEARSTART $ARG_COVERBYYEARDECAY --guides-should-cover-all-seqs"
+    ARGS_INFLUENZA="--prep-influenza --cover-by-year-decay $ARG_COVERBYYEARSTART $ARG_COVERBYYEARDECAY --gp-over-all-seqs"
 else
     ARGS_INFLUENZA=""
 fi
