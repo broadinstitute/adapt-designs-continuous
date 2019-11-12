@@ -3,7 +3,9 @@
 
 import argparse
 import glob
+import gzip
 import math
+import re
 import statistics
 import os
 
@@ -216,6 +218,54 @@ def read_designs(design_dir, timestamp):
     return designs
 
 
+def read_design_stdout(design_dir, timestamp):
+    """Read data written to stdout/err from a timestamp for a taxonomy.
+
+    Args:
+        design_dir: path to directory containing designs for a taxonomy
+        timestamp: timestamp of design to read
+
+    Returns:
+        dict with information about the design, parsed from the output
+    """
+    fp = os.path.join(design_dir, str(timestamp), 'design.out.gz')
+
+    if not os.path.isfile(fp):
+        return None
+
+    # Setup patterns
+    p_curate = re.compile('After curation, ([0-9]+) of ([0-9]+) sequences \(with unique accession\) were kept; ([0-9]+) of these are references that will be removed')
+    p_clusters = re.compile('Aligning sequences in cluster 1 \(of ([0-9]+)\)')
+    p_time = re.compile('mem=([.0-9]+) RSS=([.0-9]+) elapsed=([.0-9]+)')
+
+    info = {}
+    with gzip.open(fp, 'rt') as f:
+        for line in f:
+            m_curate = p_curate.search(line)
+            if m_curate:
+                num_kept = int(m_curate.group(1))
+                num_total = int(m_curate.group(2))
+                num_ref = int(m_curate.group(3))
+                num_kept -= num_ref
+                num_total -= num_ref
+                info['num_input_seq'] = num_total
+                info['num_curated_seq'] = num_kept
+
+            m_clusters = p_clusters.search(line)
+            if m_clusters:
+                num_clusters = int(m_clusters.group(1))
+                info['num_clusters'] = num_clusters
+
+            m_time = p_time.search(line)
+            if m_time:
+                rss = float(m_time.group(2))
+                elapsed = float(m_time.group(3))
+                info['rss'] = rss
+                info['elapsed_time'] = elapsed
+
+    return info
+
+
 def read_most_recent_designs(design_dir):
     """Read the most recent design from a taxonomy directory.
 
@@ -223,8 +273,9 @@ def read_most_recent_designs(design_dir):
         design_dir: path to directory containing designs for a taxonomy
 
     Returns:
-        tuple (t, d) where t is the timestamp of when the designs were
-        created and d is list of Design objects (one per cluster)
+        tuple (t, d, s) where t is the timestamp of when the designs were
+        created and d is list of Design objects (one per cluster) and s
+        is the stdout of the job
     """
     # design_dir contains directories named by timestamp
     timestamps = [int(t) for t in os.listdir(design_dir) if
@@ -235,8 +286,9 @@ def read_most_recent_designs(design_dir):
     # contains a design
     for t in timestamps[::-1]:
         designs = read_designs(design_dir, t)
-        if designs is not None:
-            return (t, designs)
+        stdout = read_design_stdout(design_dir, t)
+        if designs is not None and stdout is not None:
+            return (t, designs, stdout)
     raise Exception("Could not find design inside %s" % design_dir)
 
 
@@ -257,7 +309,7 @@ def find_most_recent_time_designs_changed(design_dir, jaccard_thres):
     Returns:
         oldest timestamp of designs that 'equals' the most recent designs
     """
-    _, most_recent = read_most_recent_designs(design_dir)
+    _, most_recent, _ = read_most_recent_designs(design_dir)
 
     # design_dir contains directories named by timestamp
     timestamps = [int(t) for t in os.listdir(design_dir) if
@@ -295,7 +347,7 @@ def find_most_recent_time_designs_changed(design_dir, jaccard_thres):
 
 def main(args):
     # Read the most recent designs
-    timestamp, designs = read_most_recent_designs(args.design_dir)
+    timestamp, designs, stdout = read_most_recent_designs(args.design_dir)
 
     # Determine when the designs last changed
     last_changed_timestamp = find_most_recent_time_designs_changed(
@@ -311,13 +363,34 @@ def main(args):
         mean_num_guides = statistics.mean(len(target.guide_seqs)
                 for target in design.targets)
 
-        row = [i, timestamp, last_changed_timestamp,
+        row = ['cluster', i, timestamp, last_changed_timestamp,
                 design.best_target.cost,
                 design.best_target.target_length,
                 len(design.best_target.left_primer_seqs),
                 len(design.best_target.right_primer_seqs),
                 len(design.best_target.guide_seqs)]
         print('\t'.join(str(x) for x in row))
+
+    # Compute mean values over clusters, for the best design for each cluster
+    mean_cluster_cost = statistics.mean(design.best_target.cost
+            for design in designs)
+    mean_cluster_target_len = statistics.mean(design.best_target.target_length
+            for design in designs)
+    mean_cluster_num_primers5 = statistics.mean(len(design.best_target.left_primer_seqs)
+            for design in designs)
+    mean_cluster_num_primers3 = statistics.mean(len(design.best_target.right_primer_seqs)
+            for design in designs)
+    mean_cluster_num_guides = statistics.mean(len(design.best_target.guide_seqs)
+            for design in designs)
+
+    # Print one row for the job overall
+    row = ['taxon', 'NA', timestamp, last_changed_timestamp,
+            stdout['num_input_seq'], stdout['num_curated_seq'],
+            stdout['num_clusters'], stdout['rss'], stdout['elapsed_time'],
+            mean_cluster_cost, mean_cluster_target_len,
+            mean_cluster_num_primers5, mean_cluster_num_primers3,
+            mean_cluster_num_guides]
+    print('\t'.join(str(x) for x in row))
 
 
 if __name__ == '__main__':
