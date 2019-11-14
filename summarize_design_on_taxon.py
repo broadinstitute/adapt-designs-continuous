@@ -236,7 +236,7 @@ def read_design_stdout(design_dir, timestamp):
     # Setup patterns
     p_curate = re.compile('After curation, ([0-9]+) of ([0-9]+) sequences \(with unique accession\) were kept; ([0-9]+) of these are references that will be removed')
     p_clusters = re.compile('Aligning sequences in cluster 1 \(of ([0-9]+)\)')
-    p_time = re.compile('mem=([.0-9]+) RSS=([.0-9]+) elapsed=([.0-9]+)')
+    p_time = re.compile('mem=([.0-9]+) RSS=([.0-9]+) elapsed=([:.0-9]+)')
 
     info = {}
     with gzip.open(fp, 'rt') as f:
@@ -259,7 +259,7 @@ def read_design_stdout(design_dir, timestamp):
             m_time = p_time.search(line)
             if m_time:
                 rss = float(m_time.group(2))
-                elapsed = float(m_time.group(3))
+                elapsed = m_time.group(3)
                 info['rss'] = rss
                 info['elapsed_time'] = elapsed
 

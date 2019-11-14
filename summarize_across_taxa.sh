@@ -3,7 +3,7 @@
 # Summarize designs for all taxonomies.
 
 JACCARD_THRES=0.5
-TAXONOMIES_FILE="taxonomies/all-human-associated-virus.tsv"
+TAXONOMIES_FILE="taxonomies/all-viral-with-ge10-seqs.tsv"
 
 # Determine an output directory and create it
 timestamp=$(date +"%s")
@@ -48,8 +48,14 @@ echo -n "" > $summary_outdir/summary.one-segment-per-taxid.tsv
 while read -r taxid; do
     # Sort all segments by the number of sequences, and pick the one with the
     # most
-    segment_with_most_num_seqs=$(cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" '$4==taxid {print $5"\t"$6}' | sort -k2nr | head -n 1 | awk '{print $1}')
+    segment_with_most_num_seqs=$(cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" '$4==taxid {print $5"\t"$6}' | sort -k2nr | head -n 1 | awk -F'\t' '{print $1}')
 
     # Copy summary.tsv for this taxid and segment
     cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" -v segment="$segment_with_most_num_seqs" '$4==taxid && $5==segment {print $0}' >> $summary_outdir/summary.one-segment-per-taxid.tsv
 done < <(tail -n +2 $TAXONOMIES_FILE | awk -F'\t' '{print $4}' | sort | uniq)
+
+# Write a list of the taxa that did not yield designs
+echo -n "" > $summary_outdir/summary.taxa-not-designed.tsv
+while read -r taxid; do
+    cat $TAXONOMIES_FILE | awk -F'\t' -v taxid="$taxid" '$4==taxid {print $1"\t"$2"\t"$3"\t"$4}' | sort | uniq >> $summary_outdir/summary.taxa-not-designed.tsv
+done < <(comm -23 <(cat $TAXONOMIES_FILE | tail -n +2 | awk -F'\t' '{print $4}' | sort | uniq) <(cat $summary_outdir/summary.one-segment-per-taxid.tsv | awk -F'\t' '{print $4}' | sort | uniq))
