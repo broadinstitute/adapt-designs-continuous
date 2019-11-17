@@ -165,8 +165,8 @@ class Design:
                     cols = {}
                     for j in range(len(ls)):
                         cols[col_names[j]] = ls[j]
-                    rows += [(cols['cost'], cols['target-start'],
-                             cols['target-end'], cols)]
+                    rows += [(float(cols['cost']), int(cols['target-start']),
+                             int(cols['target-end']), cols)]
 
         # Sort rows by cost (first in the tuple); in case of ties, sort
         # by target start and target end positions (second and third in
