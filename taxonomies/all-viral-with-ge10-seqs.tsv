@@ -231,7 +231,7 @@ Geminiviridae	Begomovirus	Cotton leaf curl Alabad virus	222456	DNA A	NC_004582
 Geminiviridae	Begomovirus	Cotton leaf curl Burewala virus	620894	DNA A	NC_012137
 Geminiviridae	Begomovirus	Cotton leaf curl Gezira virus	222459	DNA A	NC_002510,NC_038444
 Geminiviridae	Begomovirus	Cotton leaf curl Kokhran virus	222464	DNA A	NC_004583
-Geminiviridae	Begomovirus	Cotton leaf curl Multan virus	223252	DNA A	NC_011804,
+Geminiviridae	Begomovirus	Cotton leaf curl Multan virus	223252	DNA A	NC_011804
 Geminiviridae	Begomovirus	Cotton leaf curl virus	53010	DNA A	NC_031760
 Geminiviridae	Begomovirus	Croton yellow vein mosaic virus	207697	DNA A	NC_004300
 Geminiviridae	Begomovirus	East African cassava mosaic Cameroon virus	223262	DNA A	NC_004625
@@ -485,7 +485,6 @@ Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	4	NC_006310
 Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	5	NC_006311
 Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	6	NC_006312
 Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	7	NC_006306
-Orthomyxoviridae	Gammainfluenzavirus	Influenza C virus	11552	8	
 Orthomyxoviridae	Isavirus	Salmon isavirus	55987	1	NC_006505
 Orthomyxoviridae	Isavirus	Salmon isavirus	55987	2	NC_006503
 Orthomyxoviridae	Isavirus	Salmon isavirus	55987	3	NC_006502
