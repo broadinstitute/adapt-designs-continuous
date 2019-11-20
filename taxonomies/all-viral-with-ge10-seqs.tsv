@@ -42,7 +42,6 @@ Anelloviridae	Iotatorquevirus	Torque teno sus virus 1b	687387	None	NC_027059
 Anelloviridae	Kappatorquevirus	Torque teno sus virus k2a	1968861	None	NC_014092
 Anelloviridae	Thetatorquevirus	Torque teno canis virus	687385	None	NC_014071
 Anelloviridae	unknown	Giant panda anellovirus	2016460	None	NC_035192
-Anelloviridae	unknown	Rodent Torque teno virus 4	2054611	None	NC_040547,NC_040801
 Anelloviridae	unknown	Torque teno Leptonychotes weddellii virus-1	2012676	None	NC_035136
 Anelloviridae	unknown	Torque teno Leptonychotes weddellii virus-2	2012677	None	NC_035135
 Anelloviridae	unknown	Torque teno virus	68887	None	NC_015783
@@ -269,7 +268,6 @@ Geminiviridae	Begomovirus	Pepper huasteco yellow vein virus	223303	DNA A	NC_0013
 Geminiviridae	Begomovirus	Pepper huasteco yellow vein virus	223303	DNA B	NC_001369
 Geminiviridae	Begomovirus	Pepper yellow leaf curl Indonesia virus	292477	DNA A	NC_008283
 Geminiviridae	Begomovirus	Pepper yellow vein Mali virus	260378	DNA A	NC_005347
-Geminiviridae	Begomovirus	Rhynchosia golden mosaic virus	117198	DNA A	NC_037306,NC_010294
 Geminiviridae	Begomovirus	Sida micrantha mosaic virus	228897	DNA A	NC_005330
 Geminiviridae	Begomovirus	Sida micrantha mosaic virus	228897	DNA B	NC_005331
 Geminiviridae	Begomovirus	Sida mottle Alagoas virus	1266995	DNA A	NC_020256
@@ -618,7 +616,6 @@ Picornaviridae	Enterovirus	Enterovirus D	138951	None	NC_001430,NC_038308
 Picornaviridae	Enterovirus	Enterovirus E	12064	None	NC_001859
 Picornaviridae	Enterovirus	Enterovirus F	1330520	None	NC_008714,NC_021220
 Picornaviridae	Enterovirus	Enterovirus G	106966	None	NC_004441
-Picornaviridae	Enterovirus	Enterovirus J	1330521	None	NC_013695,NC_010415
 Picornaviridae	Enterovirus	Rhinovirus A	147711	None	NC_038311,NC_001617
 Picornaviridae	Enterovirus	Rhinovirus B	147712	None	NC_038312,NC_001490
 Picornaviridae	Enterovirus	Rhinovirus C	463676	None	NC_038878,NC_009996
