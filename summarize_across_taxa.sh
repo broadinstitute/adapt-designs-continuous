@@ -42,14 +42,15 @@ while read -r taxonomy; do
     done <<< "$summary"
 done < <(tail -n +2 $TAXONOMIES_FILE)
 
-# Now rewirte summary.tsv, choosing just one segment per taxid
-# Pick the one with the most number of input sequences (before
-# curation), breaking ties arbitrarily
+# Now rewrite summary.tsv, choosing just one segment per taxid
+# Pick the one with the smallest total cluster cost, breaking
+# ties arbitrarily
 echo -n "" > $summary_outdir/summary.one-segment-per-taxid.tsv
 while read -r taxid; do
-    # Sort all segments by the number of sequences, and pick the one with the
-    # most
-    segment_with_most_num_seqs=$(cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" '$4==taxid && $7=="taxon" {print $5"\t"$11}' | sort -k2nr | head -n 1 | awk -F'\t' '{print $1}')
+    # Sort all segments by total cluster cost, and pick the one with the
+    # smallest cost
+    # The total cluster cost is [number of clusters (col 13) * mean cluster cost (col 16)]
+    segment_with_most_num_seqs=$(cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" '$4==taxid && $7=="taxon" {print $5"\t"$13*$16}' | sort -k2g | head -n 1 | awk -F'\t' '{print $1}')
 
     # Copy summary.tsv for this taxid and segment
     cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" -v segment="$segment_with_most_num_seqs" '$4==taxid && $5==segment {print $0}' >> $summary_outdir/summary.one-segment-per-taxid.tsv
