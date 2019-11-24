@@ -188,6 +188,10 @@ class Design:
                 float(cols['cost'])
             )]
 
+        if len(targets) == 0:
+            # Could not produce any designs
+            return None
+
         return Design(targets)
 
 
@@ -213,7 +217,12 @@ def read_designs(design_dir, timestamp):
     designs = []
     clust_num = 0
     while os.path.isfile(fp(clust_num)):
-        designs += [Design.from_file(fp(clust_num), NUM_TARGETS)]
+        d = Design.from_file(fp(clust_num), NUM_TARGETS)
+        if d is None:
+            # Design for this cluster failed; for simplicity, fail everything
+            # in this directory
+            return None
+        designs += [d]
         clust_num += 1
     return designs
 
@@ -266,11 +275,12 @@ def read_design_stdout(design_dir, timestamp):
     return info
 
 
-def read_most_recent_designs(design_dir):
+def read_most_recent_designs(design_dir, ignore_before=None):
     """Read the most recent design from a taxonomy directory.
 
     Args:
         design_dir: path to directory containing designs for a taxonomy
+        ignore_before: ignore designs with timestamp before this one, if set
 
     Returns:
         tuple (t, d, s) where t is the timestamp of when the designs were
@@ -285,6 +295,8 @@ def read_most_recent_designs(design_dir):
     # Step backward from the most recent timestamps to find one that
     # contains a design
     for t in timestamps[::-1]:
+        if ignore_before is not None and t < ignore_before:
+            continue
         designs = read_designs(design_dir, t)
         stdout = read_design_stdout(design_dir, t)
         if designs is not None and stdout is not None:
@@ -292,7 +304,8 @@ def read_most_recent_designs(design_dir):
     raise Exception("Could not find design inside %s" % design_dir)
 
 
-def find_most_recent_time_designs_changed(design_dir, jaccard_thres):
+def find_most_recent_time_designs_changed(design_dir, jaccard_thres,
+        ignore_before=None):
     """Find the most recent time designs changed to produce the latest designs
     for a taxonomy.
 
@@ -305,6 +318,8 @@ def find_most_recent_time_designs_changed(design_dir, jaccard_thres):
         jaccard_thres: value of Jaccard similarity, such that any designs
             with less than this Jaccard similarity are deemed to not
             be equal
+        ignore_before: ignore designs with timestamps before this one,
+            if set
 
     Returns:
         oldest timestamp of designs that 'equals' the most recent designs
@@ -323,6 +338,9 @@ def find_most_recent_time_designs_changed(design_dir, jaccard_thres):
     # where there was a change and the designs matched the most recent
     # from there on)
     for t in timestamps[::-1]:
+        if ignore_before is not None and t < ignore_before:
+            continue
+
         designs = read_designs(design_dir, t)
         if designs is None:
             # Could not find designs for this timestamp
@@ -347,11 +365,12 @@ def find_most_recent_time_designs_changed(design_dir, jaccard_thres):
 
 def main(args):
     # Read the most recent designs
-    timestamp, designs, stdout = read_most_recent_designs(args.design_dir)
+    timestamp, designs, stdout = read_most_recent_designs(args.design_dir,
+            args.ignore_before)
 
     # Determine when the designs last changed
     last_changed_timestamp = find_most_recent_time_designs_changed(
-            args.design_dir, args.jaccard_thres)
+            args.design_dir, args.jaccard_thres, args.ignore_before)
 
     # Print a row for each cluster
     for i, design in enumerate(designs):
@@ -403,6 +422,9 @@ if __name__ == '__main__':
             type=float,
             help=("Consider two designs whose Jaccard similarity to be "
                   "less than this to be different"))
+    parser.add_argument('--ignore-before',
+            type=int,
+            help=("Ignore designs with timestamps before this one"))
 
     args = parser.parse_args()
     main(args)

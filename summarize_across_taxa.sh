@@ -4,6 +4,7 @@
 
 JACCARD_THRES=0.5
 TAXONOMIES_FILE="taxonomies/all-viral-with-ge10-seqs.tsv"
+IGNORE_BEFORE=1573900000
 
 # Determine an output directory and create it
 timestamp=$(date +"%s")
@@ -27,7 +28,7 @@ while read -r taxonomy; do
     fi
 
     # Summarize output, but redirect stderr to /dev/null
-    summary=$(python summarize_design_on_taxon.py $taxonomy_outdir $JACCARD_THRES 2> /dev/null)
+    summary=$(python summarize_design_on_taxon.py $taxonomy_outdir $JACCARD_THRES --ignore-before $IGNORE_BEFORE 2> /dev/null)
     if [ -z "$summary" ]; then
         # An error occurred; likely no designs could be found for this
         # taxonomy (e.g., none completed)
