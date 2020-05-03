@@ -1,0 +1,3 @@
+[submodule "adapt-designs"]
+	path = adapt-designs
+	url = git@github.com:broadinstitute/adapt-designs.git
