@@ -2,39 +2,34 @@
 
 # Design for a single taxon.
 
+# Load run script from adapt-designs repo
+source ~/misc-repos/adapt-designs/scripts/run-adapt/run_common.sh
+
 # Read the input
-taxid=$1
-segment=$2
-refaccs=$3
+taxalist=$1
+taxid=$2
+segment=$3
+specific=$4
+obj=$5
 
-# Set variables for design
-PREP_MEMOIZE_DIR="/ebs/dgd-analysis/prep-memoize-dir"
-MAFFT_PATH="/home/hayden/viral-ngs/viral-ngs-etc/conda-env/bin/mafft"
-CLUSTER_THRESHOLD=0.20
-ARG_GL="28"
-ARG_GM="1"
-ARG_GP="0.99"
-ARG_PL="30"
+# Create a temporary file containing taxonomies to use for specificity
+# First get the family of this taxid from the taxalist, and then
+# pull out all taxids (except this one) with that family
+family=$(cat $taxalist | awk -F'\t' -v taxid="$taxid" -v segment="$segment" '$4==taxid && $5==segment {print $1}')
+specificity_taxa=$(mktemp)
+cat $taxalist | awk -F'\t' -v taxid="$taxid" -v family="$family" '$1==family && $4!=taxid {print $4"\t"$5}' > $specificity_taxa
+
+# Find the RefSeq accessions
+refseqs=$(cat $taxalist | awk -F'\t' -v taxid="$taxid" -v segment="$segment" '$4==taxid && $5==segment {print $6}')
+
+# Change some parameters from their default values
+CLUSTER_THRESHOLD="0.30"
 ARG_PM="3"
-ARG_PP="0.99"
 ARG_MAXPRIMERSATSITE="10"
-ARG_MAXTARGETLENGTH="250"
-ARG_COSTFNWEIGHTS="0.6667 0.2222 0.1111"
-ARG_BESTNTARGETS="10"
-
-# Set a predictive model
-# This is from commit da10963 of my adapt-seq-design repo
-PREDICTIVE_MODEL="/home/hayden/adapt-seq-design/models/predictor_exp-and-pos_regress-on-active/model-8f534a8c"
-
-# Make the memoize directory
-mkdir -p $PREP_MEMOIZE_DIR
 
 # Set --prep-influenza if needed
 if [ "$taxid" == "11320" ] || [ "$taxid" == "11520" ] || [ "$taxid" == "11552" ]; then
-    ARG_COVERBYYEARSTART=2015
-    ARG_COVERBYYEARDECAY=0.95
-    # Use --gp-over-all-seqs to improve runtime on diverse datasets
-    ARGS_INFLUENZA="--prep-influenza --cover-by-year-decay $ARG_COVERBYYEARSTART $ARG_COVERBYYEARDECAY --gp-over-all-seqs"
+    ARGS_INFLUENZA="--prep-influenza"
 else
     ARGS_INFLUENZA=""
 fi
@@ -59,20 +54,42 @@ if [ "$taxid" == "11983" ] || [ "$taxid" == "463676" ]; then
 fi
 
 # Set tmp directory
-export TMPDIR="/ebs/tmpfs/tmp"
-
-# Activate adapt conda environment
-source ~/anaconda3/etc/profile.d/conda.sh
-conda activate adapt-with-tf
+if [ -d "/ebs/tmpfs/tmp" ]; then
+    export TMPDIR="/ebs/tmpfs/tmp"
+fi
 
 # Determine an output directory and create it
+# Note this overrides the OUT_DIR set when sourcing run_common.sh
 timestamp=$(date +"%s")
 segmentnospace=${segment// /-}
-outdir="out/designs/${taxid}_${segmentnospace}/${timestamp}"
-mkdir -p $outdir
+experiment="${specific}_${obj}"
+export OUT_DIR="out/designs/$experiment/${taxid}_${segmentnospace}/${timestamp}"
+mkdir -p $OUT_DIR
+
+# Make arguments depending on what is set for 'specific' and 'obj'
+if [[ "$specific" == "specific" ]]; then
+    ARG_SPECIFICITY="--id-m $ARG_IDM --id-frac $ARG_IDFRAC --id-method shard --specific-against-taxa $specificity_taxa"
+elif [[ "$specific" == "nonspecific" ]]; then
+    ARG_SPECIFICITY=""
+else
+    echo "FATAL: Unknown value for 'specific': $specific"
+    exit 1
+fi
+if [[ "$obj" == "max-activity" ]]; then
+    ARG_OBJ="--obj maximize-activity --soft-guide-constraint $ARG_SOFTGUIDECONSTRAINT --hard-guide-constraint $ARG_HARDGUIDECONSTRAINT --penalty-strength $ARG_PENALTYSTRENGTH --maximization-algorithm $ARG_MAXIMIZATIONALGORITHM"
+elif [[ "$obj" == "min-guides" ]]; then
+    ARG_OBJ="--obj minimize-guides -gm $ARG_GM -gp $ARG_GP --require-flanking3 H"
+else
+    echo "FATAL: Unknown value for 'obj': $obj"
+    exit 1
+fi
+
+# To make sure runs for different "experiments" use the same input data,
+# specify --use-accessions
+ARG_USE_ACCESSIONS="--use-accessions taxonomies/accession-lists/all-vertebrate.20200501.tsv"
 
 # Run the design
-/usr/bin/time -f "mem=%K RSS=%M elapsed=%e cpu.sys=%S .user=%U" design.py complete-targets auto-from-args $taxid "$segment" $refaccs $outdir/design.tsv -gl $ARG_GL -gm $ARG_GM -gp $ARG_GP -pl $ARG_PL -pm $ARG_PM -pp $ARG_PP --require-flanking3 H --max-primers-at-site $ARG_MAXPRIMERSATSITE --max-target-length $ARG_MAXTARGETLENGTH --cost-fn-weights $ARG_COSTFNWEIGHTS --best-n-targets $ARG_BESTNTARGETS --predict-activity-model-path $PREDICTIVE_MODEL --mafft-path $MAFFT_PATH --prep-memoize-dir $PREP_MEMOIZE_DIR --cluster-threshold $CLUSTER_THRESHOLD $ARGS_INFLUENZA --write-input-seqs $outdir/input-sequences.txt --verbose &> $outdir/design.out
+run-adapt design complete-targets auto-from-args $taxid "$segment" $refseqs $OUT_DIR/design.tsv -gl $ARG_GL -pl $ARG_PL -pm $ARG_PM -pp $ARG_PP --primer-gc-content-bounds $ARG_PRIMER_GC_LO $ARG_PRIMER_GC_HI --max-primers-at-site $ARG_MAXPRIMERSATSITE --max-target-length $ARG_MAXTARGETLENGTH $ARG_OBJ --obj-fn-weights $ARG_OBJFNWEIGHTS --best-n-targets $ARG_BESTNTARGETS $ARG_SPECIFICITY --predict-activity-model-path $ARG_PREDICTIVE_MODELS --mafft-path $MAFFT_PATH --prep-memoize-dir $PREP_MEMOIZE_DIR --ncbi-api-key $NCBI_API_KEY --cluster-threshold $CLUSTER_THRESHOLD $ARGS_INFLUENZA $ARG_USE_ACCESSIONS --verbose
 
-# gzip the stdout/stderr
-gzip $outdir/design.out
+# Remove tmp files
+rm $specificity_taxa

@@ -3,19 +3,30 @@
 # Design for all taxonomies.
 
 NJOBS=32
-TAXONOMIES_FILE="taxonomies/all-viral-with-ge10-seqs.tsv"
+TAXONOMIES_FILE="taxonomies/all-vertebrate.tsv"
+MEMORY_LIMIT="100000000"    # kilobytes
+
+# Limit memory usage for each process
+ulimit -m $MEMORY_LIMIT
+ulimit -v $MEMORY_LIMIT
 
 # Create commands for each taxonomy
-commands="/tmp/commands-run-taxa"
+commands=$(mktemp)
 echo -n "" > $commands
 while read -r taxonomy; do
-    taxid=$(echo "$taxonomy" | awk -F'\t' '{print $4}')
-    segment=$(echo "$taxonomy" | awk -F'\t' '{print $5}')
-    refaccs=$(echo "$taxonomy" | awk -F'\t' '{print $6}')
-    echo "./run_taxon.sh $taxid '$segment' $refaccs" >> $commands
+    taxid=$(echo "$taxonomy" | cut -f4)
+    segment=$(echo "$taxonomy" | cut -f5)
+
+    # Write for each of 4 "experiments"
+    for specific in "specific" "nonspecific"; do
+        for obj in "max-activity" "min-guides"; do
+            echo "./run_taxon.sh $TAXONOMIES_FILE $taxid '$segment' $specific $obj" >> $commands
+        done
+    done
 done < <(tail -n +2 $TAXONOMIES_FILE)
 
 # Run commands in parallel
-parallel --jobs $NJOBS --no-notice < $commands
+# Restart jobs 3 times on a delay of 60 sec
+parallel --jobs $NJOBS --retries 3 --delay 60 --no-notice < $commands
 
 rm $commands
