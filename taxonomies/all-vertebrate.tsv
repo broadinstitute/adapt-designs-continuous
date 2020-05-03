@@ -822,7 +822,6 @@ Hantaviridae	Orthohantavirus	Cao Bang orthohantavirus	1980464	S	NC_034484	1
 Hantaviridae	Orthohantavirus	Cao Bang orthohantavirus	1980464	L	NC_034485	1
 Hantaviridae	Orthohantavirus	Choclo orthohantavirus	1980465	S	NC_038373	1
 Hantaviridae	Orthohantavirus	Choclo orthohantavirus	1980465	M	NC_038374	2
-Hantaviridae	Orthohantavirus	Choclo orthohantavirus	1980465	L	UNKNOWN	1
 Hantaviridae	Orthohantavirus	Dabieshan orthohantavirus	1980466	M	NC_038383	1
 Hantaviridae	Orthohantavirus	Dabieshan orthohantavirus	1980466	S	NC_038384	6
 Hantaviridae	Orthohantavirus	Dobrava-Belgrade orthohantavirus	1980467	S	NC_005233	37
@@ -1575,9 +1574,9 @@ Peribunyaviridae	Orthobunyavirus	Shuni orthobunyavirus	159148	L	NC_018465	7
 Peribunyaviridae	Orthobunyavirus	Simbu orthobunyavirus	35306	L	NC_018476	1
 Peribunyaviridae	Orthobunyavirus	Simbu orthobunyavirus	35306	S	NC_018477	2
 Peribunyaviridae	Orthobunyavirus	Simbu orthobunyavirus	35306	M	NC_018478	1
-Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	L	UNKNOWN,NC_043692	2
-Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	S	UNKNOWN,NC_043693	2
-Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	M	UNKNOWN,NC_043694	2
+Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	L	NC_043692	2
+Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	S	NC_043693	2
+Peribunyaviridae	Orthobunyavirus	Tacaiuma orthobunyavirus	611707	M	NC_043694	2
 Peribunyaviridae	Orthobunyavirus	Tataguine orthobunyavirus	2560799	None	NC_043606,NC_043607,NC_043608	3
 Peribunyaviridae	Orthobunyavirus	Tete orthobunyavirus	35319	M	NC_039183	3
 Peribunyaviridae	Orthobunyavirus	Tete orthobunyavirus	35319	L	NC_039184	3
@@ -2573,7 +2572,6 @@ Retroviridae	Simiispumavirus	Western lowland gorilla simian foamy virus	2170204	
 Retroviridae	Simiispumavirus	White-tufted-ear marmoset simian foamy virus	2170205	None	NC_039030	1
 Retroviridae	Simiispumavirus	Yellow-breasted capuchin simian foamy virus	2170206	None	NC_039031	1
 Retroviridae	Spumavirus	African green monkey simian foamy virus	338079	None	NC_010820	2
-Retroviridae	Spumavirus	Macaque simian foamy virus	338478	None	UNKNOWN	3
 Retroviridae	Spumavirus	Simian foamy virus	11642	None	NC_001364	10
 Rhabdoviridae	unknown	Dolphin rhabdovirus	1511639	None	NC_025406	1
 Rhabdoviridae	unknown	Farmington virus	1027468	None	NC_025253	2
