@@ -3,7 +3,7 @@
 # Design for a single taxon.
 
 # Load run script from adapt-designs repo
-source ~/misc-repos/adapt-designs/scripts/run-adapt/run_common.sh
+source adapt-designs/scripts/run-adapt/run_common.sh
 
 # Read the input
 taxalist=$1
