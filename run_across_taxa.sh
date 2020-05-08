@@ -4,6 +4,7 @@
 
 NJOBS=32
 TAXONOMIES_FILE="taxonomies/all-vertebrate.tsv"
+RECENT_DESIGNS_FILE="recent-designs.tsv"
 MEMORY_LIMIT="100000000"    # kilobytes
 
 # Limit memory usage for each process
@@ -20,6 +21,15 @@ while read -r taxonomy; do
     # Write for each of 4 "experiments"
     for specific in "specific" "nonspecific"; do
         for obj in "max-activity" "min-guides"; do
+            if [ -f $RECENT_DESIGNS_FILE ]; then
+                # Check if this was recently designed
+                exp="${specific}_${obj}"
+                if grep -Pq "^${exp}\t${taxid}\t${segment}$" $RECENT_DESIGNS_FILE; then
+                    # Design exists as a recent design; skip it
+                    continue
+                fi
+            fi
+
             echo "./run_taxon.sh $TAXONOMIES_FILE $taxid '$segment' $specific $obj" >> $commands
         done
     done
