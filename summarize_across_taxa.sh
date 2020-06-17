@@ -1,9 +1,18 @@
 #!/bin/bash
 
 # Summarize designs for all taxonomies.
+# Args:
+#   1: experiment ('specific_max-activity', 'nonspecific_max-activity', etc.)
+
+EXPERIMENT=$1
+
+if [ ! -d "out/designs/$EXPERIMENT" ]; then
+    echo "FATAL: unknown experiment"
+    exit 1
+fi
 
 JACCARD_THRES=0.5
-TAXONOMIES_FILE="taxonomies/all-viral-with-ge10-seqs.tsv"
+TAXONOMIES_FILE="taxonomies/all-vertebrate.tsv"
 IGNORE_BEFORE=1573900000
 
 # Determine an output directory and create it
@@ -21,7 +30,7 @@ while read -r taxonomy; do
     refaccs=$(echo "$taxonomy" | awk -F'\t' '{print $6}')
 
     segmentnospace=${segment// /-}
-    taxonomy_outdir="out/designs/${taxid}_${segmentnospace}"
+    taxonomy_outdir="out/designs/$EXPERIMENT/${taxid}_${segmentnospace}"
     if [ ! -d $taxonomy_outdir ]; then
         # Designs have not been started for this taxonomy
         continue
@@ -36,9 +45,8 @@ while read -r taxonomy; do
     fi
     while read -r summary_line; do
         timestamp=$(echo "$summary_line" | awk -F'\t' '{print $3}')
-        num_seqs=$(cat ${taxonomy_outdir}/${timestamp}/input-sequences.txt | wc -l)
 
-        echo -e "$family\t$genus\t$species\t$taxid\t$segment\t$num_seqs\t$summary_line" >> $summary_outdir/summary.tsv
+        echo -e "$family\t$genus\t$species\t$taxid\t$segment\t$EXPERIMENT\t$summary_line" >> $summary_outdir/summary.tsv
     done <<< "$summary"
 done < <(tail -n +2 $TAXONOMIES_FILE)
 
@@ -47,13 +55,21 @@ done < <(tail -n +2 $TAXONOMIES_FILE)
 # ties arbitrarily
 echo -n "" > $summary_outdir/summary.one-segment-per-taxid.tsv
 while read -r taxid; do
-    # Sort all segments by total cluster cost, and pick the one with the
-    # smallest cost
-    # The total cluster cost is [number of clusters (col 13) * mean cluster cost (col 16)]
-    segment_with_most_num_seqs=$(cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" '$4==taxid && $7=="taxon" {print $5"\t"$13*$16}' | sort -k2g | head -n 1 | awk -F'\t' '{print $1}')
+    # Previously this picked the segment with the best (smallest) total cluster cost; however,
+    # this does not work as easily with the max-activity objective
+    # Now, pick the segment with the best objective value for its largest cluster
+    if [[ $EXPERIMENT == *"min"* ]]; then
+        segment_with_best_obj=$(cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" '$4==taxid && $7=="cluster" {print $5"\t"$11}' | sort -k2g | head -n 1 | awk -F'\t' '{print $1}')
+    elif [[ $EXPERIMENT == *"max"* ]]; then
+        # Same as above, but pick highest objective value: `sort -k2gr`
+        segment_with_best_obj=$(cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" '$4==taxid && $7=="cluster" {print $5"\t"$11}' | sort -k2gr | head -n 1 | awk -F'\t' '{print $1}')
+    else
+        echo "FATAL: unknown if objective is min or max"
+        exit 1
+    fi
 
     # Copy summary.tsv for this taxid and segment
-    cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" -v segment="$segment_with_most_num_seqs" '$4==taxid && $5==segment {print $0}' >> $summary_outdir/summary.one-segment-per-taxid.tsv
+    cat $summary_outdir/summary.tsv | awk -F'\t' -v taxid="$taxid" -v segment="$segment_with_best_obj" '$4==taxid && $5==segment {print $0}' >> $summary_outdir/summary.one-segment-per-taxid.tsv
 done < <(tail -n +2 $TAXONOMIES_FILE | awk -F'\t' '{print $4}' | sort | uniq)
 
 # Write a list of the taxa that did not yield designs

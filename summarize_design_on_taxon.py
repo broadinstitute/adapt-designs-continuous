@@ -18,17 +18,25 @@ NUM_TARGETS = 10
 
 class DesignTarget:
     """Store information on a design of a single target.
+
+    This is effectively an option for a design.
     """
 
     def __init__(self, target_start, target_end, guide_seqs,
-            left_primer_seqs, right_primer_seqs, cost):
+            left_primer_seqs, right_primer_seqs, objective_value,
+            guide_set_frac_bound, guide_set_expected_activity,
+            guide_set_median_activity, guide_set_5th_pctile_activity):
         self.target_start = target_start
         self.target_end = target_end
         self.target_length = target_end - target_start
         self.guide_seqs = tuple(sorted(guide_seqs))
         self.left_primer_seqs = tuple(sorted(left_primer_seqs))
         self.right_primer_seqs = tuple(sorted(right_primer_seqs))
-        self.cost = cost
+        self.objective_value = objective_value
+        self.guide_set_frac_bound = guide_set_frac_bound
+        self.guide_set_expected_activity = guide_set_expected_activity
+        self.guide_set_median_activity = guide_set_median_activity
+        self.guide_set_5th_pctile_activity = guide_set_5th_pctile_activity
 
     def has_similar_endpoints(self, other, nearby_nt=20):
         """
@@ -73,7 +81,7 @@ class Design:
 
     This stores the targets as a set (unordered). As a result, two designs
     can be equal if all their targets are equal, even if they are ordered
-    differently (e.g., different costs for each).
+    differently (e.g., different objective values for each).
     """
 
     def __init__(self, targets):
@@ -145,7 +153,7 @@ class Design:
         Args:
             fn: path to a TSV file giving targets
             num_targets: only construct a Design from the top num_targets
-                targets, as ordered by cost (if None, use all)
+                targets, as ordered by their objective value (if None, use all)
 
         Returns:
             Design object
@@ -165,27 +173,27 @@ class Design:
                     cols = {}
                     for j in range(len(ls)):
                         cols[col_names[j]] = ls[j]
-                    rows += [(float(cols['cost']), int(cols['target-start']),
-                             int(cols['target-end']), cols)]
+                    rows += [cols]
 
-        # Sort rows by cost (first in the tuple); in case of ties, sort
-        # by target start and target end positions (second and third in
-        # the tuple)
-        # Pull out the best N targets
-        rows = sorted(rows)
+        # Pull out the best N targets, assuming rows are already sorted
+        # (best on top)
         if num_targets != None:
             rows = rows[:num_targets]
 
         targets = []
         for row in rows:
-            _, _, _, cols = row
+            cols = row
             targets += [DesignTarget(
                 int(cols['target-start']),
                 int(cols['target-end']),
                 cols['guide-target-sequences'].split(' '),
                 cols['left-primer-target-sequences'].split(' '),
                 cols['right-primer-target-sequences'].split(' '),
-                float(cols['cost'])
+                float(cols['objective-value']),
+                float(cols['total-frac-bound-by-guides']),
+                float(cols['guide-set-expected-activity']),
+                float(cols['guide-set-median-activity']),
+                float(cols['guide-set-5th-pctile-activity'])
             )]
 
         if len(targets) == 0:
@@ -374,24 +382,29 @@ def main(args):
 
     # Print a row for each cluster
     for i, design in enumerate(designs):
-        mean_cost = statistics.mean(target.cost for target in design.targets)
-        mean_num_primers5 = statistics.mean(len(target.left_primer_seqs)
-                for target in design.targets)
-        mean_num_primers3 = statistics.mean(len(target.right_primer_seqs)
-                for target in design.targets)
-        mean_num_guides = statistics.mean(len(target.guide_seqs)
-                for target in design.targets)
+        # Summarize statistics across all design options
+        #mean_objective_value = statistics.mean(target.objective_value for target in design.targets)
+        #mean_num_primers5 = statistics.mean(len(target.left_primer_seqs)
+        #        for target in design.targets)
+        #mean_num_primers3 = statistics.mean(len(target.right_primer_seqs)
+        #        for target in design.targets)
+        #mean_num_guides = statistics.mean(len(target.guide_seqs)
+        #        for target in design.targets)
 
         row = ['cluster', i, timestamp, last_changed_timestamp,
-                design.best_target.cost,
+                design.best_target.objective_value,
                 design.best_target.target_length,
                 len(design.best_target.left_primer_seqs),
                 len(design.best_target.right_primer_seqs),
-                len(design.best_target.guide_seqs)]
+                len(design.best_target.guide_seqs),
+                design.best_target.guide_set_frac_bound,
+                design.best_target.guide_set_expected_activity,
+                design.best_target.guide_set_median_activity,
+                design.best_target.guide_set_5th_pctile_activity]
         print('\t'.join(str(x) for x in row))
 
     # Compute mean values over clusters, for the best design for each cluster
-    mean_cluster_cost = statistics.mean(design.best_target.cost
+    mean_cluster_objective_value = statistics.mean(design.best_target.objective_value
             for design in designs)
     mean_cluster_target_len = statistics.mean(design.best_target.target_length
             for design in designs)
@@ -401,14 +414,25 @@ def main(args):
             for design in designs)
     mean_cluster_num_guides = statistics.mean(len(design.best_target.guide_seqs)
             for design in designs)
+    mean_cluster_guide_set_frac_bound = statistics.mean(design.best_target.guide_set_frac_bound
+            for design in designs)
+    mean_cluster_guide_set_expected_activity = statistics.mean(design.best_target.guide_set_expected_activity
+            for design in designs)
+    mean_cluster_guide_set_median_activity = statistics.mean(design.best_target.guide_set_median_activity
+            for design in designs)
+    mean_cluster_guide_set_5th_pctile_activity = statistics.mean(design.best_target.guide_set_5th_pctile_activity
+            for design in designs)
 
     # Print one row for the job overall
     row = ['taxon', 'NA', timestamp, last_changed_timestamp,
             stdout['num_input_seq'], stdout['num_curated_seq'],
             stdout['num_clusters'], stdout['rss'], stdout['elapsed_time'],
-            mean_cluster_cost, mean_cluster_target_len,
+            mean_cluster_objective_value, mean_cluster_target_len,
             mean_cluster_num_primers5, mean_cluster_num_primers3,
-            mean_cluster_num_guides]
+            mean_cluster_num_guides, mean_cluster_guide_set_frac_bound,
+            mean_cluster_guide_set_expected_activity,
+            mean_cluster_guide_set_median_activity,
+            mean_cluster_guide_set_5th_pctile_activity]
     print('\t'.join(str(x) for x in row))
 
 
