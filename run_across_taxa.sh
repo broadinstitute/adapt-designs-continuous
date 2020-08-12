@@ -2,10 +2,10 @@
 
 # Design for all taxonomies.
 
-NJOBS=32
+NJOBS=8
 TAXONOMIES_FILE="taxonomies/all-vertebrate.tsv"
 RECENT_DESIGNS_FILE="recent-designs.tsv"
-MEMORY_LIMIT="100000000"    # kilobytes
+MEMORY_LIMIT="300000000"    # kilobytes
 
 # Limit memory usage for each process
 ulimit -m $MEMORY_LIMIT
@@ -35,8 +35,14 @@ while read -r taxonomy; do
     done
 done < <(tail -n +2 $TAXONOMIES_FILE)
 
+# Shuffle the commands so ones from the same family are not together; this
+# way the more resource-intensive commands are spread out
+commands_shuf=$(mktemp)
+cat $commands | shuf > $commands_shuf
+
 # Run commands in parallel
-# Restart jobs 3 times on a delay of 60 sec
-parallel --jobs $NJOBS --retries 3 --delay 60 --no-notice < $commands
+# Restart jobs 3 times on a delay of 180 sec
+parallel --jobs $NJOBS --retries 1 --delay 60 --no-notice < $commands_shuf
 
 rm $commands
+rm $commands_shuf
