@@ -3,9 +3,9 @@
 # Find designs produced recently and write them to stdout.
 
 # Define a timestamp such that everything after that is
-# considered recent; everything within the last 7 days
+# considered recent; everything within the last 150 days
 # is considered recent
-recent=$(date +%s -d "7 days ago")
+recent=$(date +%s -d "150 days ago")
 
 # Iterate over design.last-complete-timestamp files
 for f in $(find out/designs -name "design.last-complete-timestamp"); do
