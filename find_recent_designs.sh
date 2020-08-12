@@ -7,6 +7,9 @@
 # is considered recent
 recent=$(date +%s -d "150 days ago")
 
+# Write to a tmp file, and then find unique lines
+tmpf=$(mktemp)
+
 # Iterate over design.last-complete-timestamp files
 for f in $(find out/designs -name "design.last-complete-timestamp"); do
     ts=$(cat "$f")
@@ -22,7 +25,13 @@ for f in $(find out/designs -name "design.last-complete-timestamp"); do
             taxid_and_segment=$(echo "$f" | cut -d'/' -f4)
             taxid=$(echo "$taxid_and_segment" | cut -d'_' -f1)
             segment=$(echo "$taxid_and_segment" | cut -d'_' -f2)
-            echo -e "$exp\t$taxid\t$segment"
+            echo -e "$exp\t$taxid\t$segment" >> $tmpf
         fi
     fi
 done
+
+# A design can appear multiple times, e.g., if run at
+# multiple recent timestamps; filter to only output one
+cat $tmpf | sort | uniq
+
+rm $tmpf
