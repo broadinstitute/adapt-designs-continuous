@@ -17,6 +17,7 @@ echo -n "" > $commands
 while read -r taxonomy; do
     taxid=$(echo "$taxonomy" | cut -f4)
     segment=$(echo "$taxonomy" | cut -f5)
+    segmentnospace=${segment// /-}
 
     # Write for each of 4 "experiments"
     for specific in "specific" "nonspecific"; do
@@ -24,7 +25,7 @@ while read -r taxonomy; do
             if [ -f $RECENT_DESIGNS_FILE ]; then
                 # Check if this was recently designed
                 exp="${specific}_${obj}"
-                if grep -Pq "^${exp}\t${taxid}\t${segment}$" $RECENT_DESIGNS_FILE; then
+                if grep -Pq "^${exp}\t${taxid}\t${segmentnospace}$" $RECENT_DESIGNS_FILE; then
                     # Design exists as a recent design; skip it
                     continue
                 fi
