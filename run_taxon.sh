@@ -53,6 +53,31 @@ if [ "$taxid" == "11983" ] || [ "$taxid" == "463676" ]; then
     ARG_MAXTARGETLENGTH="500"
 fi
 
+# Adjust some amplicon criteria for a short virus that
+# cannot satisfy the default criteria
+if [ "$taxid" == "365327" ]; then
+    ARG_PRIMER_GC_LO="0.2"
+    ARG_PRIMER_GC_HI="0.8"
+fi
+
+# Adjust specificity arguments for some viruses; these are ones that,
+# with the default specificity arguments (--id-m and --id-frac) produced
+# no designs when $specific is "specific" but *did* produce designs
+# with $specific is "nonspecific"; likely the specificity arguments are
+# too strict, so loosen them
+# A few of them don't work with the adjusted (relaxed) arguments, so
+# for these relaxe them even further
+# These are: Porcine parvovivrus 2; Mamastrovirus 5; Respiratory syncytial virus; Ungulate bocaparvovirus 2; Ungulate bocaparvovirus 3; Panine gammaherpesvirus 1; Pongine gammaherpesvirus 2; Bovine rhinovirus 1; Rattus norvegicus polymoavirus 1; Sewage associated gemycircularvirus 3; Gemycircularvirus HV-GcV1; Bos taurus papillomavirus 13; Aichivirus F; Sewage derived gemykibivirus 1; Hepacivirus B; Goose paramyxivirus SF02; Bovine associated cyclovirus 1; Chiropteran bocaparvovirus 4; Puma feline foamy virus; Chicken associated huchismacovirus 1; Human associated huchismacovirus 1; Pestivirus K; Betaarterivirus suid 1; Fort Sherman orthobunyavirus; Equid gammaherpesvirus 7; Mopeia Lassa virus reassortant 29; Hippotragine gammaherpesvirus 1; Deltapapillomavirus 4; Finkel-Biskis-Jinkins murine sarcoma virus; Hepatitis GB virus B; Simian T-cell lymphotropic virus 6; Squirrel fibroma virus; Lyssavirus Ozernoe; Israel turkey meningoencephalomyelitis virus; Senegalese sole Iberrian betanodavirus; unidentified human coronavirus; Porcine circovirus type 1/2a; Human erythrovirus V9; Turkey parvovirus 1078; Bat mastadenovirus; Cervid alphaherpesvirus 1; Cyclovirus PKgoat21/PAK/2009
+if [ "$taxid" == "1126383" ] || [ "$taxid" == "1239569" ] || [ "$taxid" == "12814" ] || [ "$taxid" == "1511874" ] || [ "$taxid" == "1511875" ] || [ "$taxid" == "159602" ] || [ "$taxid" == "159603" ] || [ "$taxid" == "1606765" ] || [ "$taxid" == "1679933" ] || [ "$taxid" == "1843761" ] || [ "$taxid" == "1862824" ] || [ "$taxid" == "1887213" ] || [ "$taxid" == "1986959" ] || [ "$taxid" == "2004967" ] || [ "$taxid" == "2008762" ] || [ "$taxid" == "204987" ] || [ "$taxid" == "2050927" ] || [ "$taxid" == "2169773" ] || [ "$taxid" == "2169894" ] || [ "$taxid" == "2169932" ] || [ "$taxid" == "2169934" ] || [ "$taxid" == "2170090" ] || [ "$taxid" == "2499685" ] || [ "$taxid" == "2560477" ] || [ "$taxid" == "291612" ] || [ "$taxid" == "300180" ] || [ "$taxid" == "333341" ] || [ "$taxid" == "337052" ] || [ "$taxid" == "353765" ] || [ "$taxid" == "39113" ] || [ "$taxid" == "481147" ] || [ "$taxid" == "538970" ] || [ "$taxid" == "642022" ] || [ "$taxid" == "64291" ] || [ "$taxid" == "683176" ] || [ "$taxid" == "694448" ] || [ "$taxid" == "720569" ] || [ "$taxid" == "72197" ] || [ "$taxid" == "740933" ] || [ "$taxid" == "740971" ] || [ "$taxid" == "79891" ] || [ "$taxid" == "942033" ]; then
+    ARG_IDM="3"
+    ARG_IDFRAC="0.2"
+fi
+if [ "$taxid" == "1679933" ] || [ "$taxid" == "1843761" ] || [ "$taxid" == "2004967" ] || [ "$taxid" == "1986959" ] || [ "$taxid" == "159602" ] || [ "$taxid" == "159603" ] || [ "$taxid" == "1606765" ] || [ "$taxid" == "1862824" ] || [ "$taxid" == "2008762" ] || [ "$taxid" == "2050927" ] || [ "$taxid" == "2169773" ] || [ "$taxid" == "353765" ] || [ "$taxid" == "538970" ] || [ "$taxid" == "642022" ] || [ "$taxid" == "740971" ] || [ "$taxid" == "942033" ]; then
+    # Further relax arguments
+    ARG_IDM="2"
+    ARG_IDFRAC="0.4"
+fi
+
 # Set tmp directory
 if [ -d "/ebs/tmpfs/tmp" ]; then
     export TMPDIR="/ebs/tmpfs/tmp"
