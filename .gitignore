@@ -104,4 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # Output
-out/
+out/*
+
+# Allow compressed output
+!out/all-vertebrate-2020.tar.gz
